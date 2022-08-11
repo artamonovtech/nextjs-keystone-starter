@@ -1,0 +1,7 @@
+.next
+.keystone
+
+app.db
+
+public
+node_modules
