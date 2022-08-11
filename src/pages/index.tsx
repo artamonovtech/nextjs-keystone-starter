@@ -19,7 +19,6 @@ const Home: NextPage<Props> = ({ posts }) => {
       <main style={{ margin: "3rem" }}>
         <h1>Hello World! 👋🏻 </h1>
         <ul>
-          {/* Render each post with a link to the content page */}
           {posts.map(post => (
             <li key={post.id}>
               <Link href={`/post/${post.slug}`}>

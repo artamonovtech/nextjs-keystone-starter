@@ -35,10 +35,7 @@ const Post: NextPage<Props> = ({ post }) => {
 }
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const posts = await query.Post.findMany({
-    query: "slug"
-  })
-
+  const posts = await query.Post.findMany({ query: "slug" })
   const paths = posts.filter(({ slug }) => !!slug).map(({ slug }) => `/post/${slug}`)
 
   return {
@@ -50,10 +47,10 @@ export const getStaticPaths: GetStaticPaths = async () => {
 export const getStaticProps: GetStaticProps = async context => {
   const { slug } = context.params as ContextParams
 
-  const post = (await query.Post.findOne({
+  const post = await query.Post.findOne({
     where: { slug: slug },
     query: "id title content"
-  })) as Post | null
+  })
 
   if (!post) return { notFound: true }
 
