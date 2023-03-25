@@ -2,16 +2,15 @@ import React, { useState, useRef, useEffect } from "react"
 import { gql } from "graphql-request"
 import { client } from "../util/request"
 
-export function Header() {
+export const Header = () => {
   const [isLoading, setLoading] = useState<boolean>(true)
   const [user, setUser] = useState<{ name: string } | null>(null)
   const emailRef = useRef<HTMLInputElement | null>(null)
   const passwordRef = useRef<HTMLInputElement | null>(null)
 
   useEffect(() => {
-    // TODO: Fix type
     getCurrentLoggedInUser()
-      .then((data: any) => {
+      .then(data => {
         if (data?.authenticatedItem?.id) {
           setUser(data.authenticatedItem)
         }
@@ -26,8 +25,9 @@ export function Header() {
       const email = emailRef.current.value
       const password = passwordRef.current.value
 
-      // TODO: Fix type
-      authenticateUser({ email, password }).then((data: any) => {
+      authenticateUser({ email, password }).then(data => {
+        console.log("TEST", data)
+
         if (data?.authenticateUserWithPassword?.item?.id) {
           window.location.reload()
         }
@@ -68,7 +68,7 @@ export function Header() {
   )
 }
 
-function authenticateUser({ email, password }: { email: string; password: string }) {
+const authenticateUser = ({ email, password }: { email: string; password: string }) => {
   const mutation = gql`
     mutation authenticate($email: String!, $password: String!) {
       authenticateUserWithPassword(email: $email, password: $password) {
@@ -86,13 +86,13 @@ function authenticateUser({ email, password }: { email: string; password: string
   `
 
   // session token is automatically saved to cookie
-  return client.request(mutation, {
+  return client.request<{ authenticateUserWithPassword: { item: { id: string; name: string } } }>(mutation, {
     email: email,
     password: password
   })
 }
 
-function endUserSession() {
+const endUserSession = () => {
   const mutation = gql`
     mutation endUserSession {
       endSession
@@ -102,7 +102,7 @@ function endUserSession() {
   return client.request(mutation)
 }
 
-function getCurrentLoggedInUser() {
+const getCurrentLoggedInUser = () => {
   const query = gql`
     query authenticate {
       authenticatedItem {
@@ -116,5 +116,5 @@ function getCurrentLoggedInUser() {
   `
 
   // session token is automatically accessed from cookie
-  return client.request(query)
+  return client.request<{ authenticatedItem: { id: string; name: string } }>(query)
 }

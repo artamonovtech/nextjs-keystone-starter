@@ -6,6 +6,8 @@ import { client } from "../util/request"
 import { keystoneContext } from "../keystone/context"
 import { Header } from "../components/Header"
 
+type User = { id: string; name: string; email: string | null }
+
 const Home: NextPage = ({ users }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   return (
     <div
@@ -88,7 +90,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
   }
 }
 
-function ServerRenderedContent({ users }: { users: { id: string; name: string; email: string | null }[] }) {
+const ServerRenderedContent = ({ users }: { users: Array<User> }) => {
   return (
     <div>
       <p>
@@ -108,8 +110,8 @@ function ServerRenderedContent({ users }: { users: { id: string; name: string; e
   )
 }
 
-function ClientRenderedContent() {
-  const [users, setUsers] = useState<Array<{ id: string; name: string; email: string | null }>>([])
+const ClientRenderedContent = () => {
+  const [users, setUsers] = useState<Array<User>>([])
 
   // Fetch users from REST api route
   useEffect(() => {
@@ -123,8 +125,7 @@ function ClientRenderedContent() {
       }
     `
 
-    // TODO: Fix type
-    client.request(query).then((data: any) => {
+    client.request<{ users: Array<User> }>(query).then(data => {
       setUsers(data.users)
     })
   }, [])
