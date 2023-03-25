@@ -5,6 +5,7 @@ import { client } from "../util/request"
 export const Header = () => {
   const [isLoading, setLoading] = useState<boolean>(true)
   const [user, setUser] = useState<{ name: string } | null>(null)
+
   const emailRef = useRef<HTMLInputElement | null>(null)
   const passwordRef = useRef<HTMLInputElement | null>(null)
 
@@ -26,8 +27,6 @@ export const Header = () => {
       const password = passwordRef.current.value
 
       authenticateUser({ email, password }).then(data => {
-        console.log("TEST", data)
-
         if (data?.authenticateUserWithPassword?.item?.id) {
           window.location.reload()
         }
