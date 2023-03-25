@@ -9,12 +9,13 @@ datasource sqlite {
 
 generator client {
   provider = "prisma-client-js"
-  output   = "node_modules/.prisma/client"
+  output   = "node_modules/.myprisma/client"
 }
 
-model Post {
-  id      String @id @default(cuid())
-  title   String @default("")
-  slug    String @unique @default("")
-  content String @default("")
+model User {
+  id        String    @id @default(cuid())
+  name      String    @default("")
+  email     String    @unique @default("")
+  password  String
+  createdAt DateTime? @default(now())
 }

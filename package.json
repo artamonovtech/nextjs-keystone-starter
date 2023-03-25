@@ -3,26 +3,38 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
+    "keystone:dev": "keystone dev",
+    "keystone:build": "keystone build",
+    "keystone:start": "keystone start",
+    "next:dev": "next dev -p 4000",
+    "next:build": "next build",
+    "build": "keystone build && next build",
     "lint": "next lint",
-    "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,yaml,md,css}\"",
-    "postinstall": "keystone postinstall"
+    "format": "prettier --write '**/*.{js,jsx,ts,tsx,json,yaml,md,css}'",
+    "type": "tsc --project tsconfig.json --noEmit",
+    "postinstall": "keystone postinstall",
+    "start": "next start"
   },
   "dependencies": {
-    "@keystone-6/core": "^2.1.0",
-    "next": "12.2.4",
-    "react": "18.2.0",
-    "react-dom": "18.2.0"
+    "@keystone-6/auth": "^7.0.0",
+    "@keystone-6/core": "^5.0.0",
+    "@keystone-6/fields-document": "^7.0.0",
+    "@preconstruct/next": "^4.0.0",
+    "@prisma/client": "^4.11.0",
+    "graphql-request": "^5.0.0",
+    "graphql-yoga": "^3.1.0",
+    "next": "13.2.2",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
   },
   "devDependencies": {
-    "@types/node": "18.6.5",
-    "@types/react": "18.0.17",
-    "@types/react-dom": "18.0.6",
-    "eslint": "8.21.0",
-    "eslint-config-next": "12.2.4",
-    "prettier": "^2.7.1",
-    "typescript": "4.7.4"
+    "@types/node": "^18.11.14",
+    "@types/react": "^18.0.9",
+    "@types/react-dom": "^18.0.4",
+    "eslint": "8.36.0",
+    "eslint-config-next": "13.2.4",
+    "prettier": "^2.8.7",
+    "prisma": "^4.11.0",
+    "typescript": "5.0.2"
   }
 }

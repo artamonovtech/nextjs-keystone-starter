@@ -1,34 +1,38 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Next.js + Keystone
 
-## Getting Started
+Keystone can be used as a data engine in Next.js applications without having to host a separate Keystone server.
+This is made possible by Keystone's `getContext` API.
 
-First, run the development server:
+- **CRUD data within your Next.js server**: You can use Keystone data APIs directly in Next.js `getStaticProps` or `getServerSideProps` to CRUD data. ⚡️
+- **CRUD data from browser**: You can use the generated Keystone GraphQL schema to setup your own GraphQL server in a Next.js route. This enables you to send GraphQL requests from the browser. 🤯 (refer to [/pages/api/graphql.ts](/pages/api/graphql.ts) for implementation details)
+- You don't have to start the Keystone server at all.
 
-```bash
-npm run dev
-# or
-yarn dev
-```
+_Note: Since you are not starting the keystone server, the Admin UI will not be available. You can host Keystone as a separate server if you need Admin UI._
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Notes
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+- This example is setup with seed data. Demo user email is `bruce@email.com`, password is `passw0rd`.
+- `yarn next:dev` is all you need to develop your Next.js app. You don't need to start the keystone server since `getContext` will work without starting the Keystone server.
+- However when you make changes to your keystone lists, the schema files need to be regenerated. So you'll either have to run `yarn keystone:dev` or `yarn keystone:build` just once after making changes to your lists. Alternatively you can open two terminal tabs and run both `yarn keystone:dev` and `yarn next:dev` concurrently during development.
+- When you deploy your Next.js app, remember to run `yarn keystone:build` once to make sure you have the latest schema files built for `getContext` API.
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+## FAQ
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+### 1. Why won't Admin UI work?
 
-## Learn More
+Admin UI needs the Keystone server to run. Your Next.js app runs on a Next.js server. Keystone's Admin UI runs on Keystone server. You can't have two servers running in a Next.js production environment. Since we are not starting the Keystone server in production builds, we won't have access to Keystone's Admin UI. You can access it in local (use the command `yarn keystone:dev`) because you can easily start two servers in your local but once you deploy your Next.js app you won't have access to the Admin UI.
 
-To learn more about Next.js, take a look at the following resources:
+### 2. What should I do to both use Keystone in my Next.js app and have a fully functioning Admin UI?
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Easy. Deploy twice to two different servers.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+1. Deploy your Next.js app to one instance (Eg. Vercel).
+2. Deploy the Keystone server (commands in package.json) to another instance (Eg. Digital Ocean).
 
-## Deploy on Vercel
+Both these apps connect to the same database and are built with the same source code so everything will work as you expect it to.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Give it a try
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+Deploy this example to Vercel and see it for yourself.
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fkeystonejs%2Fkeystone%2Ftree%2Fmain%2Fexamples%2Fnextjs-keystone)
